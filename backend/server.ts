@@ -22,6 +22,8 @@ async function startServer() {
       'http://localhost:3000',
       'https://*.vercel.app', // All Vercel deployments
       'https://vercel.app',
+      'https://*.onrender.com', // All Render deployments
+      'https://edupremium.onrender.com', // Your frontend static site
       process.env.FRONTEND_URL || '*' // Your production frontend URL
     ],
     credentials: true
