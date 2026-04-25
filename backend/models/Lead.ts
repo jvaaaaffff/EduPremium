@@ -1,4 +1,18 @@
-import mongoose from "mongoose";
+import mongoose, { Model, Document } from "mongoose";
+
+interface ILead extends Document {
+  fullName: string;
+  email: string;
+  company?: string;
+  jobTitle?: string;
+  teamSize?: string;
+  needs?: string;
+  areasOfInterest?: string[];
+  status: string;
+  source: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const LeadSchema = new mongoose.Schema(
   {
@@ -40,4 +54,6 @@ const LeadSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Lead || mongoose.model("Lead", LeadSchema);
+const Lead: Model<ILead> = mongoose.models.Lead || mongoose.model<ILead>("Lead", LeadSchema);
+
+export default Lead;
