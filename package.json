@@ -8,7 +8,7 @@
     "dev:backend": "PORT=3000 tsx backend/server.ts",
     "dev:frontend": "vite",
     "start": "cd backend && npm start",
-    "build": "node build.js",
+    "build": "bash deploy-render.sh || node build.js",
     "postinstall": "cd backend && npm install && cd ../frontend && npm install",
     "build:frontend": "cd frontend && npm run build",
     "preview": "vite preview",
