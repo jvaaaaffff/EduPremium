@@ -42,13 +42,14 @@ async function connectDB() {
 // Import backend routes dynamically
 let apiRoutes, errorHandler;
 try {
-  const apiModule = await import('./backend/routes/api.js');
-  const errorModule = await import('./backend/middleware/errorHandler.js');
+  const apiModule = await import('./backend/routes/api.ts');
+  const errorModule = await import('./backend/middleware/errorHandler.ts');
   apiRoutes = apiModule.default;
   errorHandler = errorModule.errorHandler;
   console.log("✅ Backend routes loaded");
 } catch (err) {
   console.error("❌ Error loading backend routes:", err);
+  console.error("Stack:", err.stack);
 }
 
 // API routes - MUST come before static files
