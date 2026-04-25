@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
+dotenv.config({ path: './backend/.env' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,29 +33,51 @@ async function connectDB() {
     }
 
     await mongoose.connect(MONGODB_URI);
-    console.log("Connected to MongoDB successfully");
+    console.log("✅ Connected to MongoDB successfully");
   } catch (err) {
-    console.error("MongoDB connection error:", err);
+    console.error("❌ MongoDB connection error:", err);
   }
 }
 
-// Import backend routes
-const apiRoutes = await import('./backend/routes/api.ts');
-const errorHandler = await import('./backend/middleware/errorHandler.ts');
+// Import backend routes dynamically
+let apiRoutes, errorHandler;
+try {
+  const apiModule = await import('./backend/routes/api.js');
+  const errorModule = await import('./backend/middleware/errorHandler.js');
+  apiRoutes = apiModule.default;
+  errorHandler = errorModule.errorHandler;
+  console.log("✅ Backend routes loaded");
+} catch (err) {
+  console.error("❌ Error loading backend routes:", err);
+}
 
 // API routes - MUST come before static files
-app.use("/api/v1", apiRoutes.default);
-app.use("/api", apiRoutes.default);
+if (apiRoutes) {
+  app.use("/api/v1", apiRoutes);
+  app.use("/api", apiRoutes);
+  console.log("✅ API routes registered");
+}
 
 // Global Error Handler for API
-app.use(errorHandler.errorHandler);
+if (errorHandler) {
+  app.use(errorHandler);
+}
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+const frontendPath = path.join(__dirname, 'frontend', 'dist');
+console.log(`📁 Serving frontend from: ${frontendPath}`);
+app.use(express.static(frontendPath));
 
 // Handle React routing - return index.html for all non-API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+  const indexPath = path.join(frontendPath, 'index.html');
+  console.log(`📄 Serving index.html for: ${req.path}`);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('❌ Error serving index.html:', err);
+      res.status(500).send('Error loading page');
+    }
+  });
 });
 
 // Start server
@@ -62,9 +85,12 @@ async function startServer() {
   await connectDB();
   
   app.listen(PORT, '0.0.0.0', () => {
+    console.log('=================================');
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📱 Frontend: http://localhost:${PORT}`);
     console.log(`🔌 API: http://localhost:${PORT}/api`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log('=================================');
   });
 }
 
