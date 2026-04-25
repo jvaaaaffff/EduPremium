@@ -1,7 +1,4 @@
 import express from "express";
-import http from "http";
-import { createServer as createViteServer } from "vite";
-import path from "path";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -18,8 +15,18 @@ async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 
-  // Middleware
-  app.use(cors());
+  // CORS Configuration - Allow requests from your frontend
+  app.use(cors({
+    origin: [
+      'http://localhost:5173', // Local development
+      'http://localhost:3000',
+      'https://*.vercel.app', // All Vercel deployments
+      'https://vercel.app',
+      process.env.FRONTEND_URL || '*' // Your production frontend URL
+    ],
+    credentials: true
+  }));
+  
   app.use(express.json());
 
   // Connect to MongoDB
@@ -41,38 +48,32 @@ async function startServer() {
     console.error("MongoDB connection error:", err);
   }
 
-  // API routes FIRST
+  // Root route for health check
+  app.get("/", (req, res) => {
+    res.json({ 
+      status: "success", 
+      message: "EduPremium API Server is running!",
+      version: "1.0.0",
+      endpoints: {
+        health: "/api/health",
+        tasks: "/api/tasks",
+        leads: "/api/leads"
+      }
+    });
+  });
+
+  // API routes
   app.use("/api/v1", apiRoutes);
   app.use("/api", apiRoutes);
 
   // Global Error Handler
   app.use(errorHandler);
 
-  // Create HTTP server to share with Vite HMR WebSocket
-  const httpServer = http.createServer(app);
-
-  // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: {
-        middlewareMode: true,
-        allowedHosts: true,
-        hmr: { server: httpServer },
-      },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    // Production: serve static files
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
-
-  httpServer.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  // Start server
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔗 API available at: http://localhost:${PORT}/api`);
   });
 }
 
