@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
@@ -60,57 +65,61 @@ async function startServer() {
 
   // Serve frontend in production
   if (process.env.NODE_ENV === 'production') {
-    // Try multiple possible paths for frontend
-    const possiblePaths = [
-      path.join(process.cwd(), 'frontend', 'dist'),
-      path.join(process.cwd(), '..', 'frontend', 'dist'),
-      path.join(__dirname, '..', 'frontend', 'dist')
-    ];
+    // Frontend should be at: /opt/render/project/src/frontend/dist
+    const frontendPath = path.join(process.cwd(), 'frontend', 'dist');
     
-    let frontendPath = null;
-    for (const testPath of possiblePaths) {
-      try {
-        const fs = await import('fs');
-        if (fs.existsSync(testPath)) {
-          frontendPath = testPath;
-          console.log(`✅ Found frontend at: ${frontendPath}`);
-          break;
-        }
-      } catch (err) {
-        // Continue to next path
-      }
-    }
+    console.log(`📁 Looking for frontend at: ${frontendPath}`);
+    console.log(`📍 Current working directory: ${process.cwd()}`);
     
-    if (frontendPath) {
-      // Serve static files
-      app.use(express.static(frontendPath));
-      
-      // Handle React routing - return index.html for all non-API routes
-      app.get('*', (req, res) => {
-        res.sendFile(path.join(frontendPath, 'index.html'), (err) => {
-          if (err) {
-            console.error('❌ Error serving index.html:', err);
-            res.status(500).json({ 
-              status: "error", 
-              message: "Error loading page" 
-            });
+    try {
+      const fs = await import('fs');
+      if (fs.existsSync(frontendPath)) {
+        console.log(`✅ Frontend found!`);
+        
+        // Serve static files
+        app.use(express.static(frontendPath));
+        
+        // Handle React routing - return index.html for all non-API routes
+        app.get('*', (req, res) => {
+          const indexPath = path.join(frontendPath, 'index.html');
+          res.sendFile(indexPath, (err) => {
+            if (err) {
+              console.error('❌ Error serving index.html:', err);
+              res.status(500).json({ 
+                status: "error", 
+                message: "Error loading page" 
+              });
+            }
+          });
+        });
+      } else {
+        console.error(`❌ Frontend not found at: ${frontendPath}`);
+        
+        // Try to list what's in the current directory
+        try {
+          const files = fs.readdirSync(process.cwd());
+          console.error('📂 Files in current directory:', files);
+          
+          if (files.includes('frontend')) {
+            const frontendFiles = fs.readdirSync(path.join(process.cwd(), 'frontend'));
+            console.error('📂 Files in frontend directory:', frontendFiles);
           }
+        } catch (e) {
+          console.error('Could not list directory contents');
+        }
+        
+        // Fallback: show error message
+        app.get('*', (req, res) => {
+          res.status(500).json({ 
+            status: "error", 
+            message: "Frontend not found. Make sure frontend is built.",
+            expectedPath: frontendPath,
+            cwd: process.cwd()
+          });
         });
-      });
-    } else {
-      console.error('❌ Frontend dist folder not found!');
-      console.error('Tried paths:', possiblePaths);
-      console.error('Current working directory:', process.cwd());
-      
-      // Fallback: show error message
-      app.get('*', (req, res) => {
-        res.status(500).json({ 
-          status: "error", 
-          message: "Frontend not found. Make sure frontend is built.",
-          cwd: process.cwd(),
-          triedPaths: possiblePaths
-        });
-      });
+      }
+    } catch (err) {
+      console.error('❌ Error checking frontend path:', err);
     }
   } else {
     // Development: Show API info at root
