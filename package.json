@@ -8,7 +8,7 @@
     "dev:backend": "PORT=3000 tsx backend/server.ts",
     "dev:frontend": "vite",
     "start": "node server-combined.js",
-    "build": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "build": "npm install && cd backend && npm install && cd .. && cd frontend && npm install && npm run build && cd ..",
     "build:frontend": "cd frontend && npm run build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
