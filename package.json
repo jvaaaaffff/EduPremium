@@ -8,7 +8,7 @@
     "dev:backend": "PORT=3000 tsx backend/server.ts",
     "dev:frontend": "vite",
     "start": "cd backend && npm start",
-    "build": "npm install && cd backend && npm install && cd ../frontend && npm install && npm run build",
+    "build": "echo 'Installing root dependencies...' && npm install && echo 'Installing backend dependencies...' && cd backend && npm install && echo 'Installing frontend dependencies...' && cd ../frontend && npm install && echo 'Building frontend...' && npm run build && echo 'Build complete! Checking dist folder...' && ls -la dist && cd ..",
     "postinstall": "cd backend && npm install && cd ../frontend && npm install",
     "build:frontend": "cd frontend && npm run build",
     "preview": "vite preview",
