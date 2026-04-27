@@ -65,7 +65,13 @@ if (errorHandler) {
 }
 
 // Serve static frontend files
-const frontendPath = path.join(__dirname, 'frontend', 'dist');
+// Resolve relative to server-combined.js
+import fs from 'fs';
+const rootDistPath = path.join(__dirname, 'dist');
+const frontendDistPath = path.join(__dirname, 'frontend', 'dist');
+
+// Use the dist folder created by build.js if available, else fallback
+const frontendPath = fs.existsSync(rootDistPath) ? rootDistPath : frontendDistPath;
 console.log(`📁 Serving frontend from: ${frontendPath}`);
 app.use(express.static(frontendPath));
 

@@ -65,4 +65,31 @@ if (existsSync(distPath)) {
   process.exit(1);
 }
 
+// Step 6: Copy dist to root for Static Site deployment
+console.log('6️⃣ Copying dist to root...');
+const rootDistPath = join(process.cwd(), 'dist');
+try {
+  // Remove existing dist if it exists
+  if (existsSync(rootDistPath)) {
+    const { rmSync } = await import('fs');
+    rmSync(rootDistPath, { recursive: true, force: true });
+  }
+  
+  // Copy frontend/dist to root/dist
+  const { cpSync } = await import('fs');
+  cpSync(distPath, rootDistPath, { recursive: true });
+  console.log(`✅ Dist copied to: ${rootDistPath}`);
+  
+  // Verify
+  if (existsSync(join(rootDistPath, 'index.html'))) {
+    console.log('✅ index.html found in root dist!');
+  } else {
+    console.error('❌ index.html NOT found in root dist!');
+    process.exit(1);
+  }
+} catch (err) {
+  console.error('❌ Error copying dist:', err);
+  process.exit(1);
+}
+
 console.log('\n🎉 Build completed successfully!');

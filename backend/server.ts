@@ -65,14 +65,18 @@ async function startServer() {
 
   // Serve frontend in production
   if (process.env.NODE_ENV === 'production') {
-    // Frontend should be at: /opt/render/project/src/frontend/dist
-    const frontendPath = path.join(process.cwd(), 'frontend', 'dist');
+    // Resolve frontend path relative to this file (__dirname is backend/)
+    const fs = await import('fs');
+    const rootDistPath = path.join(__dirname, '..', 'dist'); // Copied by build.js
+    const frontendDistPath = path.join(__dirname, '..', 'frontend', 'dist'); // Original build output
+    
+    // Check which dist folder actually exists
+    const frontendPath = fs.existsSync(rootDistPath) ? rootDistPath : frontendDistPath;
     
     console.log(`📁 Looking for frontend at: ${frontendPath}`);
     console.log(`📍 Current working directory: ${process.cwd()}`);
     
     try {
-      const fs = await import('fs');
       if (fs.existsSync(frontendPath)) {
         console.log(`✅ Frontend found!`);
         
