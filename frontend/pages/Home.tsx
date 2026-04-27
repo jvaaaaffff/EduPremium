@@ -177,7 +177,12 @@ export default function Home() {
                     <p className="text-blue-100 text-lg max-w-sm mb-12">Learn directly from practitioners at top tech companies. No pre-recorded dry lectures.</p>
                     <div className="mt-auto flex items-center gap-4">
                        <div className="flex -space-x-3">
-                          {[1,2,3,4].map(i => <div key={i} className="w-10 h-10 rounded-full border-2 border-[#0f52ba] bg-slate-300"></div>)}
+                          {[
+                            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
+                            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80",
+                            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80",
+                            "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80"
+                          ].map((src, i) => <img referrerPolicy="no-referrer" key={i} src={src} alt="avatar" className="w-10 h-10 rounded-full border-2 border-[#0f52ba] object-cover bg-slate-300" />)}
                        </div>
                        <span className="text-sm font-bold">Join 500+ professionals</span>
                     </div>

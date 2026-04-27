@@ -27,11 +27,13 @@ export default function Mentorship() {
           </div>
         </div>
         <div className="w-full md:w-1/2">
-          <div className="bg-slate-300 aspect-video rounded-xl shadow-xl overflow-hidden">
-            {/* Fake image */}
-            <div className="w-full h-full object-cover flex items-center justify-center text-slate-500 bg-slate-200">
-               Image of Mentorship session
-            </div>
+          <div className="bg-slate-300 aspect-video rounded-xl shadow-xl overflow-hidden relative">
+            <img 
+              referrerPolicy="no-referrer" 
+              src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+              alt="Mentorship session" 
+              className="w-full h-full object-cover absolute inset-0"
+            />
           </div>
         </div>
       </div>
@@ -82,9 +84,9 @@ export default function Mentorship() {
               </p>
               <div className="flex items-center gap-1">
                  <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-300"></div>
-                    <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-400"></div>
-                    <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-500"></div>
+                    <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="avatar" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+                    <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=100&q=80" alt="avatar" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
+                    <img referrerPolicy="no-referrer" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="avatar" className="w-8 h-8 rounded-full border-2 border-white object-cover" />
                  </div>
                  <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold flex items-center justify-center border-2 border-white ml-[-8px] z-10">
                    +240
@@ -154,6 +156,7 @@ export default function Mentorship() {
              before="Junior Analyst"
              after="Lead Analytics Director"
              hike="+125%"
+             image="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
            />
            <StoryCard 
              name="Elena S."
@@ -161,6 +164,7 @@ export default function Mentorship() {
              before="UX Researcher"
              after="VP of Product"
              hike="+85%"
+             image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
            />
            <StoryCard 
              name="David K."
@@ -168,6 +172,7 @@ export default function Mentorship() {
              before="Freelance Developer"
              after="Principal Architect"
              hike="+150%"
+             image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
            />
         </div>
       </div>
@@ -194,10 +199,11 @@ export default function Mentorship() {
   );
 }
 
-function StoryCard({name, role, before, after, hike}: any) {
+function StoryCard({name, role, before, after, hike, image}: any) {
   return (
     <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
        <div className="h-48 bg-slate-300 relative">
+          <img referrerPolicy="no-referrer" src={image || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"} alt={name} className="w-full h-full object-cover absolute inset-0" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
           <div className="absolute bottom-4 left-4 text-white">
              <div className="text-sm">{name}</div>

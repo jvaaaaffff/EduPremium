@@ -39,10 +39,10 @@ export default function Enterprise() {
            className="w-full lg:w-1/2 relative"
          >
             <div className="bg-slate-900 aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-transparent mix-blend-overlay"></div>
-              {/* Fake image content */}
-              <div className="absolute inset-0 flex items-center justify-center p-8 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
-                <div className="text-center text-emerald-400 font-display font-black text-3xl sm:text-5xl tracking-tighter leading-none opacity-80 uppercase transform -rotate-12 hover:rotate-0 transition-transform duration-500 cursor-pointer">
+              <div className="absolute inset-0 z-10 bg-gradient-to-br from-blue-600/30 to-transparent mix-blend-overlay"></div>
+              <img src="https://images.unsplash.com/photo-1558403194-611308249627?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Workspace Transformation" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 z-20 flex items-center justify-center p-8 bg-black/10">
+                <div className="text-center text-emerald-400 font-display font-black text-3xl sm:text-5xl tracking-tighter leading-none opacity-90 uppercase transform -rotate-12 hover:rotate-0 transition-transform duration-500 cursor-pointer">
                    <div className="text-white drop-shadow-lg">Workspace</div>
                    <div className="text-blue-400 border-y-4 border-current my-2 py-2 drop-shadow-lg bg-slate-900/50 backdrop-blur-sm px-4">Transformation</div>
                 </div>
@@ -150,13 +150,10 @@ export default function Enterprise() {
           className="w-full md:w-1/2"
         >
            <div className="bg-slate-900 rounded-3xl aspect-[3/4] shadow-2xl relative overflow-hidden group">
-             <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
-             {/* Fake portrait image */}
-             <div className="w-full h-full bg-slate-800 flex items-center justify-center font-display font-bold text-slate-700 text-2xl group-hover:scale-105 transition-transform duration-1000">
-               Client Success Story
-             </div>
+             <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Client documentary" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+             <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent z-10"></div>
              
-             <div className="absolute bottom-10 left-10 right-10">
+             <div className="absolute bottom-10 left-10 right-10 z-20">
                 <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-blue-600/30">
                   <div className="w-0 h-0 border-t-6 border-t-transparent border-l-10 border-l-white border-b-6 border-b-transparent ml-1"></div>
                 </div>
@@ -230,7 +227,7 @@ function RoiCard({tag, title, desc, author, company}: any) {
       <h4 className="text-xl font-display font-bold text-slate-900 mb-3 w-[90%]">{title}</h4>
       <p className="text-slate-600 text-sm w-[90%] mb-8 leading-relaxed">{desc}</p>
       <div className="flex items-center gap-4">
-         <div className="w-10 h-10 bg-slate-200 rounded-full shrink-0"></div>
+         <img referrerPolicy="no-referrer" src={`https://ui-avatars.com/api/?name=${encodeURIComponent(author)}&background=0D8ABC&color=fff&rounded=true`} alt={author} className="w-10 h-10 rounded-full shrink-0" />
          <div>
             <div className="text-sm font-bold text-slate-900">{author}</div>
             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{company}</div>

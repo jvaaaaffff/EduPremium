@@ -50,9 +50,9 @@ export default function Programs() {
           </div>
           <div className="hidden sm:block w-px h-16 bg-slate-200"></div>
           <div className="flex gap-4 pr-6 opacity-30 relative z-10 w-full sm:w-auto justify-start sm:justify-end">
-             <div className="w-8 h-8 bg-slate-400 rounded-md"></div>
-             <div className="w-8 h-8 bg-slate-400 rounded-md"></div>
-             <div className="w-8 h-8 bg-slate-400 rounded-md"></div>
+             <img referrerPolicy="no-referrer" src="https://cdn.worldvectorlogo.com/logos/amazon-2.svg" alt="Amazon" className="w-8 h-8 object-contain filter grayscale" />
+             <img referrerPolicy="no-referrer" src="https://cdn.worldvectorlogo.com/logos/google-1-1.svg" alt="Google" className="w-8 h-8 object-contain filter grayscale" />
+             <img referrerPolicy="no-referrer" src="https://cdn.worldvectorlogo.com/logos/meta-1.svg" alt="Meta" className="w-8 h-8 object-contain filter grayscale" />
           </div>
         </motion.div>
       </div>
